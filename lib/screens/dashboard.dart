@@ -43,6 +43,9 @@ class _DashboardState extends State<Dashboard> {
           );
         },
         child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
           padding: EdgeInsets.all(8.0),
           height: 100,
           width: 150,
