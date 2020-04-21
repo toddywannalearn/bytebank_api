@@ -1,4 +1,4 @@
-import 'package:bytebank/repositories/database/app_database.dart';
+import 'package:bytebank/repositories/database/dao/contato_dao.dart';
 import 'package:flutter/material.dart';
 import 'package:bytebank/components/common_field.dart';
 import 'package:bytebank/models/contatos.dart';
@@ -12,6 +12,7 @@ class _ContatosFormState extends State<ContatosForm> {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _accountNumberController =
       TextEditingController();
+  final ContatoDao _contatoDao = ContatoDao();
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +44,13 @@ class _ContatosFormState extends State<ContatosForm> {
                   child: RaisedButton(
                     child: Text('Create'),
                     onPressed: () {
-                      final Contato contato = Contato(
-                        9,
-                        _fullNameController.text,
-                        int.tryParse(
-                          _accountNumberController.text,
-                        ),
-                      );
-                      debugPrint(contato.toString());
-                      save(contato);
+                      final int id = 9;
+                      final String name = _fullNameController.text.toString();
+                      final int accountNumber =
+                          int.tryParse(_accountNumberController.text);
+                      final Contato contato = Contato(id, name, accountNumber);
+                      _contatoDao.save(contato)
+                          .then((id) => Navigator.pop(context));
                     },
                   ),
                 ),
