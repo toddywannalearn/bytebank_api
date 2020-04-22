@@ -3,6 +3,7 @@ import 'package:bytebank/repositories/database/dao/contato_dao.dart';
 import 'package:bytebank/screens/contatos_form.dart';
 import 'package:flutter/material.dart';
 import 'package:bytebank/components/contato_card.dart';
+import 'package:bytebank/components/emptyState_card.dart';
 
 class ListaContatos extends StatefulWidget {
   //final List<Contato> contatos = List();
@@ -49,7 +50,9 @@ class _ListaContatosState extends State<ListaContatos> {
             break;
           case ConnectionState.done:
             final List<Contato> contatos = snapshot.data;
-            return listaContatos(contatos);
+            return contatos.length == 0
+                ? EmptyStateCard()
+                : listaContatos(contatos);
             break;
         }
         return Text('Unknown error');
@@ -77,6 +80,9 @@ class _ListaContatosState extends State<ListaContatos> {
           ),
           onDismissed: (DismissDirection dir) {
             _contatoDao.deleteContato(contato.id);
+            setState(() {
+              Scaffold.of(context).reassemble();
+            });
             Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: Text('contato id ${contato.id}'),
