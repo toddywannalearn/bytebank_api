@@ -81,16 +81,19 @@ class _ListaContatosState extends State<ListaContatos> {
           onDismissed: (DismissDirection dir) {
             _contatoDao.deleteContato(contato.id);
             setState(() {
-              Scaffold.of(context).reassemble();
+              _contatoDao.findAll();
             });
             Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: Text('contato id ${contato.id}'),
-                duration: Duration(seconds: 3),
+                duration: Duration(seconds: 2),
                 action: SnackBarAction(
-                  label: 'print on debug',
+                  label: 'Desfazer',
                   onPressed: () {
-                    debugPrint('snackbar clicked');
+                    _contatoDao.save(contato);
+                    setState(() {
+                      _contatoDao.findAll();
+                    });
                   },
                 ),
               ),
