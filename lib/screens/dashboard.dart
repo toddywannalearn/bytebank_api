@@ -14,7 +14,13 @@ class _DashboardState extends State<Dashboard> {
         centerTitle: true,
         title: Text('Dashboard'),
       ),
-      body: Column(
+      body: _bodyWidgets(),
+    );
+  }
+
+  Widget _bodyWidgets() {
+    return SingleChildScrollView(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -24,14 +30,14 @@ class _DashboardState extends State<Dashboard> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: cardContatos(),
+            child: _cardContatos(),
           ),
         ],
       ),
     );
   }
 
-  Widget cardContatos() {
+  Widget _cardContatos() {
     return Material(
       borderRadius: BorderRadius.circular(8.0),
       color: Theme.of(context).primaryColor,
@@ -43,27 +49,31 @@ class _DashboardState extends State<Dashboard> {
             ),
           );
         },
-        child: Container(
-          padding: EdgeInsets.all(8.0),
-          height: 100,
-          width: 150,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Icon(
-                Icons.people,
-                color: Colors.white,
-              ),
-              Text(
-                'Contatos',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ],
+        child: _contatoContainer(),
+      ),
+    );
+  }
+
+  Widget _contatoContainer() {
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      height: 100,
+      width: 150,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Icon(
+            Icons.people,
+            color: Colors.white,
           ),
-        ),
+          Text(
+            'Contatos',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }

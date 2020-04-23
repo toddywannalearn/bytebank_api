@@ -1,13 +1,12 @@
-import 'package:bytebank/models/contatos.dart';
+import 'package:bytebank/models/contato.dart';
 import 'package:bytebank/repositories/database/dao/contato_dao.dart';
 import 'package:bytebank/screens/contatos_form.dart';
 import 'package:flutter/material.dart';
 import 'package:bytebank/components/contato_card.dart';
 import 'package:bytebank/components/emptyState_card.dart';
+import 'package:bytebank/components/loading.dart';
 
 class ListaContatos extends StatefulWidget {
-  //final List<Contato> contatos = List();
-
   @override
   _ListaContatosState createState() => _ListaContatosState();
 }
@@ -21,7 +20,7 @@ class _ListaContatosState extends State<ListaContatos> {
       appBar: AppBar(
         title: Text('Contatos'),
       ),
-      body: futureBuilder(),
+      body: _futureBuilder(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -35,7 +34,7 @@ class _ListaContatosState extends State<ListaContatos> {
     );
   }
 
-  Widget futureBuilder() {
+  Widget _futureBuilder() {
     return FutureBuilder<List<Contato>>(
       initialData: List(),
       future: _contatoDao.findAll(),
@@ -44,7 +43,7 @@ class _ListaContatosState extends State<ListaContatos> {
           case ConnectionState.none:
             break;
           case ConnectionState.waiting:
-            return loading();
+            return Loading();
             break;
           case ConnectionState.active:
             break;
@@ -64,55 +63,52 @@ class _ListaContatosState extends State<ListaContatos> {
     return ListView.builder(
       itemBuilder: (context, index) {
         final Contato contato = contatos[index];
-        final String item = contatos[index].id.toString();
-        return Dismissible(
-          key: Key(item),
-          child: ContatoCard(contato),
-          direction: DismissDirection.endToStart,
-          background: Container(
-            color: Colors.redAccent,
-            child: Icon(
-              Icons.delete,
-              color: Colors.white,
-              size: 32.0,
-            ),
-            alignment: Alignment.centerRight,
-          ),
-          onDismissed: (DismissDirection dir) {
-            _contatoDao.deleteContato(contato.id);
-            setState(() {
-              _contatoDao.findAll();
-            });
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text('contato id ${contato.id}'),
-                duration: Duration(seconds: 2),
-                action: SnackBarAction(
-                  label: 'Desfazer',
-                  onPressed: () {
-                    _contatoDao.save(contato);
-                    setState(() {
-                      _contatoDao.findAll();
-                    });
-                  },
-                ),
-              ),
-            );
-          },
-        );
+        return _dismissible(context, contatos, contato, index);
       },
       itemCount: contatos.length,
     );
   }
 
-  Widget loading() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          CircularProgressIndicator(),
-          Text('Loading...'),
-        ],
+  Widget _dismissible(BuildContext context, List<Contato> contatos,
+      Contato contato, int index) {
+    final String item = contatos[index].id.toString();
+    return Dismissible(
+      key: Key(item),
+      child: ContatoCard(contato),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        color: Colors.redAccent,
+        child: Icon(
+          Icons.delete,
+          color: Colors.white,
+          size: 32.0,
+        ),
+        alignment: Alignment.centerRight,
+      ),
+      onDismissed: (DismissDirection dir) {
+        _contatoDao.deleteContato(contato.id);
+        setState(() {
+          _contatoDao.findAll();
+        });
+        Scaffold.of(context).showSnackBar(
+          _snackBar(contato),
+        );
+      },
+    );
+  }
+
+  Widget _snackBar(Contato contato) {
+    return SnackBar(
+      content: Text('contato id ${contato.id}'),
+      duration: Duration(seconds: 2),
+      action: SnackBarAction(
+        label: 'Desfazer',
+        onPressed: () {
+          _contatoDao.save(contato);
+          setState(() {
+            _contatoDao.findAll();
+          });
+        },
       ),
     );
   }

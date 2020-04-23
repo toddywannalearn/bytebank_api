@@ -1,4 +1,4 @@
-import 'package:bytebank/models/contatos.dart';
+import 'package:bytebank/models/contato.dart';
 import 'package:flutter/material.dart';
 
 class ContatoCard extends StatelessWidget {
