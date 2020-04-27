@@ -14,11 +14,14 @@ class ListaContatos extends StatefulWidget {
 class _ListaContatosState extends State<ListaContatos> {
   final ContatoDao _contatoDao = ContatoDao();
 
+  static const _appBarTitle = 'Contatos';
+  static const _snackLabel = 'Desfazer';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contatos'),
+        title: Text(_appBarTitle),
       ),
       body: _futureBuilder(),
       floatingActionButton: FloatingActionButton(
@@ -99,10 +102,10 @@ class _ListaContatosState extends State<ListaContatos> {
 
   Widget _snackBar(Contato contato) {
     return SnackBar(
-      content: Text('contato id ${contato.id}'),
+      content: Text('${contato.name} foi removido'),
       duration: Duration(seconds: 2),
       action: SnackBarAction(
-        label: 'Desfazer',
+        label: _snackLabel,
         onPressed: () {
           _contatoDao.save(contato);
           setState(() {

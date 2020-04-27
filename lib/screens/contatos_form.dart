@@ -14,38 +14,46 @@ class _ContatosFormState extends State<ContatosForm> {
       TextEditingController();
   final ContatoDao _contatoDao = ContatoDao();
 
+  static const String _appBarTitle = 'Novo contato';
+  static const String _fieldName = 'Full name';
+  static const String _fieldAccount = 'Account number';
+  static const String _buttonText = 'Create';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Novo contato'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              CommonField(
-                label: 'Full name',
-                controller: _fullNameController,
+        appBar: AppBar(
+          title: Text(_appBarTitle),
+        ),
+        body: _formBody());
+  }
+
+  Widget _formBody() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            CommonField(
+              label: _fieldName,
+              controller: _fullNameController,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: CommonField(
+                label: _fieldAccount,
+                controller: _accountNumberController,
+                keyboardType: TextInputType.number,
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: CommonField(
-                  label: 'Account number',
-                  controller: _accountNumberController,
-                  keyboardType: TextInputType.number,
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: SizedBox(
+                width: double.maxFinite,
+                child: _criarContatoButton(context),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: SizedBox(
-                  width: double.maxFinite,
-                  child: _criarContatoButton(context),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -53,7 +61,7 @@ class _ContatosFormState extends State<ContatosForm> {
 
   Widget _criarContatoButton(BuildContext context) {
     return RaisedButton(
-      child: Text('Create'),
+      child: Text(_buttonText),
       onPressed: () {
         final int id = 9;
         final String name = _fullNameController.text.toString();
