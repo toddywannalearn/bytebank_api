@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bytebank/screens/contatos_list.dart';
 
@@ -19,21 +20,29 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Widget _bodyWidgets() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset('images/bytebank_logo.png'),
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints:
+                BoxConstraints(minHeight: viewportConstraints.maxHeight),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset('images/bytebank_logo.png'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: _cardContatos(),
+                ),
+              ],
+            ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _cardContatos(),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
