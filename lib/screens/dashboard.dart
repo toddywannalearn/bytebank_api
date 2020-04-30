@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bytebank/screens/contatos_list.dart';
+import 'package:flutter/rendering.dart';
+
+import 'contatos_list.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -24,8 +27,7 @@ class _DashboardState extends State<Dashboard> {
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return SingleChildScrollView(
           child: ConstrainedBox(
-            constraints:
-                BoxConstraints(minHeight: viewportConstraints.maxHeight),
+            constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,9 +36,23 @@ class _DashboardState extends State<Dashboard> {
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset('images/bytebank_logo.png'),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: _cardContatos(),
+                Container(
+                  height: 120,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      _DashboardButton(
+                        'Transfer',
+                        Icons.monetization_on,
+                        onClick: () => _showListaContatos(context),
+                      ),
+                      _DashboardButton(
+                        'Transaction feed',
+                        Icons.description,
+                        onClick: () => print('feed clicked'),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -46,38 +62,55 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  Widget _cardContatos() {
-    return Material(
-      borderRadius: BorderRadius.circular(8.0),
-      color: Theme.of(context).primaryColor,
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ListaContatos(),
-            ),
-          );
-        },
-        child: _contatoContainer(),
+  void _showListaContatos(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => ListaContatos(),
+    ));
+  }
+}
+
+class _DashboardButton extends StatelessWidget {
+  final String text;
+  final IconData icon;
+  final Function onClick;
+
+  _DashboardButton(this.text, this.icon, {@required this.onClick});
+
+  @override
+  Widget build(BuildContext context) {
+    return _buttonMaterial(context);
+  }
+
+  Widget _buttonMaterial(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Material(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Theme.of(context).primaryColor,
+        child: InkWell(
+          onTap: () {
+            onClick();
+          },
+          child: _buttonContainer(),
+        ),
       ),
     );
   }
 
-  Widget _contatoContainer() {
+  Widget _buttonContainer() {
     return Container(
       padding: EdgeInsets.all(8.0),
-      height: 100,
       width: 150,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Icon(
-            Icons.people,
+            icon,
             color: Colors.white,
           ),
           Text(
-            'Contatos',
+            text,
             style: TextStyle(
               color: Colors.white,
             ),
