@@ -1,3 +1,4 @@
+import 'package:bytebank/screens/transacoes_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bytebank/screens/contatos_list.dart';
@@ -49,7 +50,7 @@ class _DashboardState extends State<Dashboard> {
                       _DashboardButton(
                         'Transaction feed',
                         Icons.description,
-                        onClick: () => print('feed clicked'),
+                        onClick: () => _showListaTransacoes(context),
                       ),
                     ],
                   ),
@@ -62,11 +63,19 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  void _showListaContatos(BuildContext context) {
+  _showListaContatos(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => ListaContatos(),
     ));
   }
+
+  _showListaTransacoes(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => ListaTransacoes(),
+    ));
+  }
+
+
 }
 
 class _DashboardButton extends StatelessWidget {
