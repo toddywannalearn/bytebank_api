@@ -52,12 +52,12 @@ class _ListaContatosState extends State<ListaContatos> {
             break;
           case ConnectionState.done:
             final List<Contato> contatos = snapshot.data;
-            return contatos.length == 0
-                ? EmptyStateCard()
+            return contatos.isEmpty
+                ? EmptyStateCard('Nenhum contato adicionado!')
                 : listaContatos(contatos);
             break;
         }
-        return Text('Unknown error');
+        return EmptyStateCard('Unknown error');
       },
     );
   }

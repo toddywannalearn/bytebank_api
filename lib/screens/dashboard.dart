@@ -74,8 +74,6 @@ class _DashboardState extends State<Dashboard> {
       builder: (context) => ListaTransacoes(),
     ));
   }
-
-
 }
 
 class _DashboardButton extends StatelessWidget {
