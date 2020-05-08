@@ -1,6 +1,7 @@
 import 'package:bytebank/models/contato.dart';
 import 'package:bytebank/repositories/database/dao/contato_dao.dart';
 import 'package:bytebank/screens/contatos_form.dart';
+import 'package:bytebank/screens/transaction_form.dart';
 import 'package:flutter/material.dart';
 import 'package:bytebank/components/contato_card.dart';
 import 'package:bytebank/components/emptyState_card.dart';
@@ -77,7 +78,10 @@ class _ListaContatosState extends State<ListaContatos> {
     final String item = contatos[index].id.toString();
     return Dismissible(
       key: Key(item),
-      child: ContatoCard(contato),
+      child: ContatoCard(
+        contato,
+        onClick: () => _showTransacaoForm(context, contato),
+      ),
       direction: DismissDirection.endToStart,
       background: Container(
         color: Colors.redAccent,
@@ -98,6 +102,11 @@ class _ListaContatosState extends State<ListaContatos> {
         );
       },
     );
+  }
+
+  void _showTransacaoForm(BuildContext context, Contato contato) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => TransactionForm(contato)));
   }
 
   Widget _snackBar(Contato contato) {
