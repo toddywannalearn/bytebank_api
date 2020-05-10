@@ -1,6 +1,6 @@
 import 'package:bytebank/components/emptyState_card.dart';
 import 'package:bytebank/components/loading.dart';
-import 'package:bytebank/http/webclient.dart';
+import 'package:bytebank/http/webclients/transacao_webclient.dart';
 import 'package:bytebank/models/transacao.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +10,8 @@ class ListaTransacoes extends StatefulWidget {
 }
 
 class _ListaTransacoesState extends State<ListaTransacoes> {
+  final TransacaoWebClient _webClient = TransacaoWebClient();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +20,7 @@ class _ListaTransacoesState extends State<ListaTransacoes> {
       ),
       body: FutureBuilder<List<Transacao>>(
         initialData: List(),
-        future: findAll(),
+        future: _webClient.findAll(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -29,7 +31,7 @@ class _ListaTransacoesState extends State<ListaTransacoes> {
             case ConnectionState.active:
               break;
             case ConnectionState.done:
-              if(snapshot.hasData){
+              if (snapshot.hasData) {
                 final List<Transacao> transacoes = snapshot.data;
                 return transacoes.isEmpty
                     ? EmptyStateCard('Nenhuma transação encontrada')
