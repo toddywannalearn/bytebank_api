@@ -111,9 +111,15 @@ class _ListaContatosState extends State<ListaContatos> {
 
   Widget _snackBar(Contato contato) {
     return SnackBar(
-      content: Text('${contato.name} foi removido'),
+      content: Text(
+        '${contato.name} foi removido',
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
       duration: Duration(seconds: 2),
       action: SnackBarAction(
+        textColor: Colors.yellow,
         label: _snackLabel,
         onPressed: () {
           _contatoDao.save(contato);

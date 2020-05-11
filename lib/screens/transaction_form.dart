@@ -1,3 +1,4 @@
+import 'package:bytebank/components/common_field.dart';
 import 'package:bytebank/http/webclients/transacao_webclient.dart';
 import 'package:bytebank/models/contato.dart';
 import 'package:bytebank/models/transacao.dart';
@@ -46,10 +47,9 @@ class _TransactionFormState extends State<TransactionForm> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: TextField(
+                child: CommonField(
                   controller: _valueController,
-                  style: TextStyle(fontSize: 24.0),
-                  decoration: InputDecoration(labelText: 'Value'),
+                  label: 'Valor',
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ),
@@ -64,13 +64,34 @@ class _TransactionFormState extends State<TransactionForm> {
                           double.tryParse(_valueController.text);
                       final transacaoCriada = Transacao(value, widget.contato);
 
-                      _webClient.insertTransacao(transacaoCriada).then(
-                        (transacao) {
-                          if (transacao != null) {
-                            Navigator.pop(context);
-                          }
-                        },
-                      );
+                      if (value != null) {
+                        _webClient.insertTransacao(transacaoCriada).then(
+                          (transacao) {
+                            if (transacao != null) {
+                              Navigator.pop(context);
+                              showDialog(
+                                builder: (BuildContext context) {
+                                  return simpleDialog(
+                                      'Transferencia realizada com sucesso!',
+                                      () => Navigator.pop(context));
+                                },
+                                useRootNavigator: true,
+                                context: context,
+                                //   child: simpleDialog(() => Navigator.of(context).pop()),
+                              );
+                            }
+                          },
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return simpleDialog(
+                                'O campo valor deve ser preenchido!',
+                                () => Navigator.pop(context));
+                          },
+                        );
+                      }
                     },
                   ),
                 ),
@@ -79,6 +100,25 @@ class _TransactionFormState extends State<TransactionForm> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget simpleDialog(String text, Function onClick) {
+    return SimpleDialog(
+      title: Text(text),
+      children: <Widget>[
+        SimpleDialogOption(
+          child: Center(
+            child: Text(
+              'OK!',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          onPressed: onClick,
+        ),
+      ],
     );
   }
 }

@@ -4,10 +4,10 @@ class ThemesApp{
 
   ThemeData mainTheme(){
     return ThemeData(
-      primaryColor: Colors.brown[700],
-      accentColor: Colors.brown[700],
+      primaryColor: Colors.green[900],
+      accentColor: Colors.green[900],
       buttonTheme: ButtonThemeData(
-        buttonColor: Colors.brown[700],
+        buttonColor: Colors.green[900],
         textTheme: ButtonTextTheme.primary,
       ),
     );
