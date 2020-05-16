@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:bytebank/screens/contatos_list.dart';
 import 'package:flutter/rendering.dart';
 
+import 'contatoTransacoes_dashboard.dart';
 import 'contatos_list.dart';
 
 class Dashboard extends StatefulWidget {
@@ -52,6 +53,11 @@ class _DashboardState extends State<Dashboard> {
                         Icons.description,
                         onClick: () => _showListaTransacoes(context),
                       ),
+                      _DashboardButton(
+                        'Info Transactions',
+                        Icons.description,
+                        onClick: () => _showContatoTransacoes(context),
+                      ),
                     ],
                   ),
                 ),
@@ -72,6 +78,12 @@ class _DashboardState extends State<Dashboard> {
   _showListaTransacoes(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => ListaTransacoes(),
+    ));
+  }
+
+  _showContatoTransacoes(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => ContatoTransacoesDashboard(),
     ));
   }
 }

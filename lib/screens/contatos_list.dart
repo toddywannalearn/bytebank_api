@@ -14,9 +14,16 @@ class ListaContatos extends StatefulWidget {
 
 class _ListaContatosState extends State<ListaContatos> {
   final ContatoDao _contatoDao = ContatoDao();
+  Future<List<Contato>> _future;
 
   static const _appBarTitle = 'Contatos';
   static const _snackLabel = 'Desfazer';
+
+  @override
+  void initState() {
+    _future = _contatoDao.findAll();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +48,7 @@ class _ListaContatosState extends State<ListaContatos> {
   Widget _futureBuilder() {
     return FutureBuilder<List<Contato>>(
       initialData: List(),
-      future: _contatoDao.findAll(),
+      future: _future,
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:

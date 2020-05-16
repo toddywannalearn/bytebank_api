@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:bytebank/http/webclient.dart';
+import 'package:bytebank/models/contato.dart';
+import 'package:bytebank/models/contatoXtransacao.dart';
 import 'package:bytebank/models/transacao.dart';
+import 'package:bytebank/repositories/database/dao/contato_dao.dart';
 import 'package:http/http.dart';
 
 class TransacaoWebClient {
-  final String url = 'http://192.168.0.11:8080/transactions';
+  final String url = 'http://192.168.0.17:8080/transactions';
 
   Future<List<Transacao>> findAll() async {
     final Response response =
@@ -29,5 +32,27 @@ class TransacaoWebClient {
         body: transacaoJson);
 
     return Transacao.fromJson(jsonDecode(response.body));
+  }
+
+  Future<List<ContatoxTransacao>> contatoxtransacao() async {
+    List<Transacao> transacoes = await findAll();
+    List<Contato> contatos = await ContatoDao().findAll();
+
+    List<ContatoxTransacao> contatoTransacoes = List();
+
+    _totalPorContato(contatos, transacoes, contatoTransacoes);
+    return contatoTransacoes;
+  }
+
+  void _totalPorContato(List<Contato> contatos, List<Transacao> transacoes, List<ContatoxTransacao> contatoTransacoes) {
+    for (var c in contatos) {
+      double valor = 0.0;
+      for (var t in transacoes) {
+        if (c.name == t.contato.name) {
+          valor = valor + t.valor;
+        }
+      }
+      contatoTransacoes.add(ContatoxTransacao(c.name, valor));
+    }
   }
 }

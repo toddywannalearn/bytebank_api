@@ -11,6 +11,13 @@ class ListaTransacoes extends StatefulWidget {
 
 class _ListaTransacoesState extends State<ListaTransacoes> {
   final TransacaoWebClient _webClient = TransacaoWebClient();
+  Future<List<Transacao>> _future;
+
+  @override
+  void initState() {
+    _future = TransacaoWebClient().findAll();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +27,7 @@ class _ListaTransacoesState extends State<ListaTransacoes> {
       ),
       body: FutureBuilder<List<Transacao>>(
         initialData: List(),
-        future: _webClient.findAll(),
+        future: _future,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
