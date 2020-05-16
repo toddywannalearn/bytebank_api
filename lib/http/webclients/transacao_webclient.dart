@@ -21,13 +21,13 @@ class TransacaoWebClient {
     return transacoes;
   }
 
-  Future<Transacao> insertTransacao(Transacao transacao) async {
+  Future<Transacao> insertTransacao(Transacao transacao, String password) async {
     final String transacaoJson = jsonEncode(transacao.toJson());
 
     final Response response = await client.post(url,
         headers: {
           'Content-type': 'application/json',
-          'password': '1000',
+          'password': password,
         },
         body: transacaoJson);
 
@@ -44,7 +44,8 @@ class TransacaoWebClient {
     return contatoTransacoes;
   }
 
-  void _totalPorContato(List<Contato> contatos, List<Transacao> transacoes, List<ContatoxTransacao> contatoTransacoes) {
+  void _totalPorContato(List<Contato> contatos, List<Transacao> transacoes,
+      List<ContatoxTransacao> contatoTransacoes) {
     for (var c in contatos) {
       double valor = 0.0;
       for (var t in transacoes) {

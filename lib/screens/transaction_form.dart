@@ -1,4 +1,5 @@
 import 'package:bytebank/components/common_field.dart';
+import 'package:bytebank/components/dialog.dart';
 import 'package:bytebank/http/webclients/transacao_webclient.dart';
 import 'package:bytebank/models/contato.dart';
 import 'package:bytebank/models/transacao.dart';
@@ -65,22 +66,24 @@ class _TransactionFormState extends State<TransactionForm> {
                       final transacaoCriada = Transacao(value, widget.contato);
 
                       if (value != null) {
-                        _webClient.insertTransacao(transacaoCriada).then(
-                          (transacao) {
-                            if (transacao != null) {
-                              Navigator.pop(context);
-                              showDialog(
-                                builder: (BuildContext context) {
-                                  return simpleDialog(
-                                      'Transferencia realizada com sucesso!',
-                                      () => Navigator.pop(context));
-                                },
-                                useRootNavigator: true,
-                                context: context,
-                                //   child: simpleDialog(() => Navigator.of(context).pop()),
-                              );
-                            }
+                        showDialog(
+                          builder: (BuildContext context) {
+                            return AuthDialog(
+                              onConfirm: (String password) {
+                                _webClient
+                                    .insertTransacao(transacaoCriada, password)
+                                    .then(
+                                  (transacao) {
+                                    if (transacao != null) {
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                );
+                              },
+                            );
                           },
+                          useRootNavigator: true,
+                          context: context,
                         );
                       } else {
                         showDialog(
