@@ -49,7 +49,7 @@ class _ContatoTransacoesDashboardState
               return EmptyStateCard('404 - Not Found');
               break;
           }
-          return EmptyStateCard('404 = Not Found');
+          return EmptyStateCard('404 - Not Found');
         },
       ),
     );

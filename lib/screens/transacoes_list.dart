@@ -10,7 +10,6 @@ class ListaTransacoes extends StatefulWidget {
 }
 
 class _ListaTransacoesState extends State<ListaTransacoes> {
-  final TransacaoWebClient _webClient = TransacaoWebClient();
   Future<List<Transacao>> _future;
 
   @override

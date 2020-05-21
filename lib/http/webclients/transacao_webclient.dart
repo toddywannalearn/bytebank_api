@@ -8,11 +8,8 @@ import 'package:bytebank/repositories/database/dao/contato_dao.dart';
 import 'package:http/http.dart';
 
 class TransacaoWebClient {
-  final String url = 'http://192.168.0.17:8080/transactions';
-
   Future<List<Transacao>> findAll() async {
-    final Response response =
-        await client.get(url).timeout(Duration(seconds: 5));
+    final Response response = await client.get(url);
 
     final List<dynamic> decodedJson = jsonDecode(response.body);
     final List<Transacao> transacoes =
@@ -21,7 +18,8 @@ class TransacaoWebClient {
     return transacoes;
   }
 
-  Future<Transacao> insertTransacao(Transacao transacao, String password) async {
+  Future<Transacao> insertTransacao(
+      Transacao transacao, String password) async {
     final String transacaoJson = jsonEncode(transacao.toJson());
 
     final Response response = await client.post(url,
@@ -31,8 +29,29 @@ class TransacaoWebClient {
         },
         body: transacaoJson);
 
-    return Transacao.fromJson(jsonDecode(response.body));
+    if (response.statusCode == 200) {
+      return Transacao.fromJson(jsonDecode(response.body));
+    }
+
+    _throwHttpError(response.statusCode);
   }
+
+  void _throwHttpError(int statusCode) {
+    throw HttpException(_getMessage(statusCode));
+  }
+
+  String _getMessage(int statusCode) {
+    if (_statusCodeResponse.containsKey(statusCode)) {
+      return _statusCodeResponse[statusCode];
+    }
+    return 'Erro Desconhecido';
+  }
+
+  static final Map<int, String> _statusCodeResponse = {
+    400: 'Erro na validação dos campos',
+    401: 'Falha na autenticação',
+    409: 'A transação já existe',
+  };
 
   Future<List<ContatoxTransacao>> contatoxtransacao() async {
     List<Transacao> transacoes = await findAll();
@@ -56,4 +75,10 @@ class TransacaoWebClient {
       contatoTransacoes.add(ContatoxTransacao(c.name, valor));
     }
   }
+}
+
+class HttpException implements Exception {
+  final String message;
+
+  HttpException(this.message);
 }

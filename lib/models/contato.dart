@@ -1,5 +1,3 @@
-import 'package:bytebank/models/transacao.dart';
-
 class Contato {
   final int id;
   final String name;
