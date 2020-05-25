@@ -1,11 +1,11 @@
-import 'package:bytebank/screens/transacoes_list.dart';
+import 'package:bytebank/screens/transacoes/transacoes_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:bytebank/screens/contatos_list.dart';
+import 'package:bytebank/screens/contatos/contatos_list.dart';
 import 'package:flutter/rendering.dart';
 
 import 'contatoTransacoes_dashboard.dart';
-import 'contatos_list.dart';
+import 'contatos/contatos_list.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -13,12 +13,19 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+
+  static const String _appBarTitle = 'Dashboard';
+  static const String _dashBtnTransferir = 'Transferir';
+  static const String _dashBtnTransacoes = 'Transações';
+  static const String _dashBtnTotalTransacoes = 'Total operações';
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Dashboard'),
+        title: Text(_appBarTitle),
       ),
       body: _bodyWidgets(),
     );
@@ -44,17 +51,17 @@ class _DashboardState extends State<Dashboard> {
                     scrollDirection: Axis.horizontal,
                     children: <Widget>[
                       _DashboardButton(
-                        'Transfer',
+                        _dashBtnTransferir,
                         Icons.monetization_on,
                         onClick: () => _showListaContatos(context),
                       ),
                       _DashboardButton(
-                        'Transaction feed',
+                        _dashBtnTransacoes,
                         Icons.description,
                         onClick: () => _showListaTransacoes(context),
                       ),
                       _DashboardButton(
-                        'Info Transactions',
+                        _dashBtnTotalTransacoes,
                         Icons.description,
                         onClick: () => _showContatoTransacoes(context),
                       ),

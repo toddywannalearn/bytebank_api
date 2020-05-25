@@ -12,6 +12,11 @@ class ListaTransacoes extends StatefulWidget {
 class _ListaTransacoesState extends State<ListaTransacoes> {
   Future<List<Transacao>> _future;
 
+  static const String _appBarTitle = 'Transações';
+  static const String _emptyList = 'Nenhuma transação encontrada';
+  static const String _notFoundCard = '404 - Not Found';
+  static const String _errorCard = 'Unknown error!';
+
   @override
   void initState() {
     _future = TransacaoWebClient().findAll();
@@ -22,7 +27,7 @@ class _ListaTransacoesState extends State<ListaTransacoes> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Transações'),
+        title: Text(_appBarTitle),
       ),
       body: FutureBuilder<List<Transacao>>(
         initialData: List(),
@@ -40,13 +45,13 @@ class _ListaTransacoesState extends State<ListaTransacoes> {
               if (snapshot.hasData) {
                 final List<Transacao> transacoes = snapshot.data;
                 return transacoes.isEmpty
-                    ? EmptyStateCard('Nenhuma transação encontrada')
+                    ? EmptyStateCard(_emptyList)
                     : listaTransacoes(transacoes);
               }
-              return EmptyStateCard('404 - Not Found');
+              return EmptyStateCard(_notFoundCard);
               break;
           }
-          return EmptyStateCard('Unknown error!');
+          return EmptyStateCard(_errorCard);
         },
       ),
     );

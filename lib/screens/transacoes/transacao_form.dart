@@ -24,11 +24,15 @@ class _TransactionFormState extends State<TransactionForm> {
   final String _transacaoId = Uuid().v4();
   bool _sending = false;
 
+  static const String _appBarTitle = 'Nova transação';
+  static const String _valueFieldLabel = 'Valor';
+  static const String _transferBtnText = 'Transferir';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New transaction'),
+        title: Text(_appBarTitle),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -63,7 +67,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 padding: const EdgeInsets.only(top: 16.0),
                 child: CommonField(
                   controller: _valueController,
-                  label: 'Valor',
+                  label: _valueFieldLabel,
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ),
@@ -72,7 +76,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 child: SizedBox(
                   width: double.maxFinite,
                   child: RaisedButton(
-                    child: Text('Transfer'),
+                    child: Text(_transferBtnText),
                     onPressed: () {
                       final double value =
                           double.tryParse(_valueController.text);

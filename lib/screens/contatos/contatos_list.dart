@@ -1,7 +1,7 @@
 import 'package:bytebank/models/contato.dart';
 import 'package:bytebank/repositories/database/dao/contato_dao.dart';
-import 'package:bytebank/screens/contatos_form.dart';
-import 'package:bytebank/screens/transaction_form.dart';
+import 'package:bytebank/screens/contatos/contatos_form.dart';
+import 'package:bytebank/screens/transacoes/transacao_form.dart';
 import 'package:flutter/material.dart';
 import 'package:bytebank/components/contato_card.dart';
 import 'package:bytebank/components/emptyState_card.dart';
@@ -18,6 +18,8 @@ class _ListaContatosState extends State<ListaContatos> {
 
   static const _appBarTitle = 'Contatos';
   static const _snackLabel = 'Desfazer';
+  static const _emptyList = 'Nenhum contato adicionado!';
+  static const _errorCard = 'Unknown error';
 
   @override
   void initState() {
@@ -61,11 +63,11 @@ class _ListaContatosState extends State<ListaContatos> {
           case ConnectionState.done:
             final List<Contato> contatos = snapshot.data;
             return contatos.isEmpty
-                ? EmptyStateCard('Nenhum contato adicionado!')
+                ? EmptyStateCard(_emptyList)
                 : listaContatos(contatos);
             break;
         }
-        return EmptyStateCard('Unknown error');
+        return EmptyStateCard(_errorCard);
       },
     );
   }

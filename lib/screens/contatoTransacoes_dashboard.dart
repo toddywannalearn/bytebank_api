@@ -14,6 +14,11 @@ class _ContatoTransacoesDashboardState
     extends State<ContatoTransacoesDashboard> {
   Future<List<ContatoxTransacao>> _future;
 
+  static const String _appBarTitle = 'Transações por contato';
+  static const String _emptyList = 'Nenhuma transação encontrada';
+  static const String _notFoundCard = '404 - Not Found';
+  static const String _errorCard = 'Unknown Error';
+
   @override
   void initState() {
     _future = TransacaoWebClient().contatoxtransacao();
@@ -24,7 +29,7 @@ class _ContatoTransacoesDashboardState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Transações por contato'),
+        title: Text(_appBarTitle),
       ),
       body: FutureBuilder<List<ContatoxTransacao>>(
         initialData: List(),
@@ -43,13 +48,13 @@ class _ContatoTransacoesDashboardState
                 final List<ContatoxTransacao> contatosXtransacoes =
                     snapshot.data;
                 return contatosXtransacoes.isEmpty
-                    ? EmptyStateCard('Nenhuma transação encontrada')
+                    ? EmptyStateCard(_emptyList)
                     : Table(contatosXtransacoes);
               }
-              return EmptyStateCard('404 - Not Found');
+              return EmptyStateCard(_notFoundCard);
               break;
           }
-          return EmptyStateCard('404 - Not Found');
+          return EmptyStateCard(_errorCard);
         },
       ),
     );
@@ -61,16 +66,19 @@ class Table extends StatelessWidget {
 
   Table(this.contatosXtransacoes);
 
+  static const String _columnName = 'Nome';
+  static const String _columnTotal = 'Total R\$';
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: DataTable(
         columns: <DataColumn>[
           DataColumn(
-            label: Text('Nome'),
+            label: Text(_columnName),
           ),
           DataColumn(
-            label: Text('Total R\$'),
+            label: Text(_columnTotal),
           )
         ],
         rows: contatosXtransacoes
