@@ -11,7 +11,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemesApp().mainTheme(),
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        buttonTheme: ButtonThemeData(
+          buttonColor: Colors.greenAccent,
+          textTheme: ButtonTextTheme.primary,
+        ),
+      ),
       //home: AuthDialog(),
       home: Dashboard(),
     );

@@ -13,12 +13,10 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
   static const String _appBarTitle = 'Dashboard';
   static const String _dashBtnTransferir = 'Transferir';
   static const String _dashBtnTransacoes = 'Transações';
   static const String _dashBtnTotalTransacoes = 'Total operações';
-
 
   @override
   Widget build(BuildContext context) {
@@ -36,33 +34,37 @@ class _DashboardState extends State<Dashboard> {
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return SingleChildScrollView(
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
+            constraints:
+                BoxConstraints(minHeight: viewportConstraints.maxHeight),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.asset('images/bytebank_logo.png'),
+                  child: ClipRRect(
+                    child: Image.asset('images/logo.jpeg'),
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
                 ),
                 Container(
                   height: 120,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: <Widget>[
-                      _DashboardButton(
+                      DashboardButton(
                         _dashBtnTransferir,
                         Icons.monetization_on,
                         onClick: () => _showListaContatos(context),
                       ),
-                      _DashboardButton(
+                      DashboardButton(
                         _dashBtnTransacoes,
                         Icons.description,
                         onClick: () => _showListaTransacoes(context),
                       ),
-                      _DashboardButton(
+                      DashboardButton(
                         _dashBtnTotalTransacoes,
-                        Icons.description,
+                        Icons.history,
                         onClick: () => _showContatoTransacoes(context),
                       ),
                     ],
@@ -95,12 +97,12 @@ class _DashboardState extends State<Dashboard> {
   }
 }
 
-class _DashboardButton extends StatelessWidget {
+class DashboardButton extends StatelessWidget {
   final String text;
   final IconData icon;
   final Function onClick;
 
-  _DashboardButton(this.text, this.icon, {@required this.onClick});
+  DashboardButton(this.text, this.icon, {@required this.onClick});
 
   @override
   Widget build(BuildContext context) {
