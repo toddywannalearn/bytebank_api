@@ -5,6 +5,7 @@ import 'package:bytebank/components/response_dialog.dart';
 import 'package:bytebank/http/webclients/transacao_webclient.dart';
 import 'package:bytebank/models/contato.dart';
 import 'package:bytebank/models/transacao.dart';
+import 'package:bytebank/widgets/app_dependencies.dart';
 import 'package:flutter/material.dart';
 import 'package:http_interceptor/models/http_interceptor_exception.dart';
 import 'package:uuid/uuid.dart';
@@ -20,7 +21,6 @@ class TransactionForm extends StatefulWidget {
 
 class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _valueController = TextEditingController();
-  final TransacaoWebClient _webClient = TransacaoWebClient();
   final String _transacaoId = Uuid().v4();
   bool _sending = false;
 
@@ -30,6 +30,8 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   Widget build(BuildContext context) {
+    final AppDependencies dependencies = AppDependencies.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_appBarTitle),
@@ -87,7 +89,8 @@ class _TransactionFormState extends State<TransactionForm> {
                         builder: (BuildContext contextDialog) {
                           return AuthDialog(
                             onConfirm: (String password) {
-                              _save(transacaoCriada, password, context);
+                              _save(dependencies.transacaoWebClient,
+                                  transacaoCriada, password, context);
                             },
                           );
                         },
@@ -104,11 +107,16 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   void _save(
-      Transacao transacaoCriada, String password, BuildContext context) async {
+    TransacaoWebClient webClient,
+    Transacao transacaoCriada,
+    String password,
+    BuildContext context,
+  ) async {
     setState(() {
       _sending = true;
     });
-    Transacao transacao = await _send(transacaoCriada, password, context);
+    Transacao transacao =
+        await _send(webClient, transacaoCriada, password, context);
 
     await _showMensagemSucesso(transacao, context);
   }
@@ -125,8 +133,12 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   Future<Transacao> _send(
-      Transacao transacaoCriada, String password, BuildContext context) async {
-    final Transacao transacao = await _webClient
+    TransacaoWebClient webClient,
+    Transacao transacaoCriada,
+    String password,
+    BuildContext context,
+  ) async {
+    final Transacao transacao = await webClient
         .insertTransacao(transacaoCriada, password)
         .catchError((e) {
       _showDialog(

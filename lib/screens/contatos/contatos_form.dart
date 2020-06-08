@@ -1,7 +1,8 @@
-import 'package:bytebank/repositories/database/dao/contato_dao.dart';
-import 'package:flutter/material.dart';
 import 'package:bytebank/components/common_field.dart';
 import 'package:bytebank/models/contato.dart';
+import 'package:bytebank/repositories/database/dao/contato_dao.dart';
+import 'package:bytebank/widgets/app_dependencies.dart';
+import 'package:flutter/material.dart';
 
 class ContatosForm extends StatefulWidget {
   @override
@@ -12,7 +13,6 @@ class _ContatosFormState extends State<ContatosForm> {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _accountNumberController =
       TextEditingController();
-  final ContatoDao _contatoDao = ContatoDao();
 
   static const String _appBarTitle = 'Novo contato';
   static const String _fieldName = 'Full name';
@@ -21,14 +21,16 @@ class _ContatosFormState extends State<ContatosForm> {
 
   @override
   Widget build(BuildContext context) {
+    final dependencies = AppDependencies.of(context);
+
     return Scaffold(
         appBar: AppBar(
           title: Text(_appBarTitle),
         ),
-        body: _formBody());
+        body: _formBody(dependencies));
   }
 
-  Widget _formBody() {
+  Widget _formBody(AppDependencies dependencies) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -50,7 +52,7 @@ class _ContatosFormState extends State<ContatosForm> {
               padding: const EdgeInsets.only(top: 16.0),
               child: SizedBox(
                 width: double.maxFinite,
-                child: _criarContatoButton(context),
+                child: _criarContatoButton(context, dependencies.contatoDao),
               ),
             ),
           ],
@@ -59,7 +61,7 @@ class _ContatosFormState extends State<ContatosForm> {
     );
   }
 
-  Widget _criarContatoButton(BuildContext context) {
+  Widget _criarContatoButton(BuildContext context, ContatoDao contatoDao) {
     return RaisedButton(
       child: Text(_buttonText),
       onPressed: () {
@@ -68,8 +70,14 @@ class _ContatosFormState extends State<ContatosForm> {
         final int accountNumber = int.tryParse(_accountNumberController.text);
         final Contato contato = Contato(id, name, accountNumber);
 
-        _contatoDao.save(contato).then((id) => Navigator.pop(context));
+        _save(contatoDao, contato, context);
       },
     );
+  }
+
+  void _save(
+      ContatoDao contatoDao, Contato contato, BuildContext context) async {
+    await contatoDao.save(contato);
+    Navigator.pop(context);
   }
 }

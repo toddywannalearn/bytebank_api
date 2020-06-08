@@ -28,6 +28,12 @@ class _ListaTransacoesState extends State<ListaTransacoes> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_appBarTitle),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: (){},
+          ),
+        ],
       ),
       body: FutureBuilder<List<Transacao>>(
         initialData: List(),
