@@ -110,7 +110,11 @@ class _ListaContatosState extends State<ListaContatos> {
 
   void _showContatoForm(BuildContext context) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => ContatosForm()));
+        .push(MaterialPageRoute(builder: (context) => ContatosForm())).then((value) {
+          setState(() {
+            ScaffoldState().reassemble();
+          });
+    });
   }
 
   Widget _snackBar(Contato contato, ContatoDao contatoDao) {
