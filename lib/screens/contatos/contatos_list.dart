@@ -14,7 +14,6 @@ class ListaContatos extends StatefulWidget {
 }
 
 class _ListaContatosState extends State<ListaContatos> {
-
   static const _appBarTitle = 'Contatos';
   static const _snackLabel = 'Desfazer';
   static const _emptyList = 'Nenhum contato adicionado!';
@@ -110,10 +109,11 @@ class _ListaContatosState extends State<ListaContatos> {
 
   void _showContatoForm(BuildContext context) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => ContatosForm())).then((value) {
-          setState(() {
-            ScaffoldState().reassemble();
-          });
+        .push(MaterialPageRoute(builder: (context) => ContatosForm()))
+        .then((value) {
+      setState(() {
+        ScaffoldState().reassemble();
+      });
     });
   }
 

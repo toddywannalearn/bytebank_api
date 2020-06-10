@@ -1,4 +1,5 @@
 import 'package:bytebank/components/common_field.dart';
+import 'package:bytebank/components/response_dialog.dart';
 import 'package:bytebank/models/contato.dart';
 import 'package:bytebank/repositories/database/dao/contato_dao.dart';
 import 'package:bytebank/widgets/app_dependencies.dart';
@@ -70,7 +71,14 @@ class _ContatosFormState extends State<ContatosForm> {
         final int accountNumber = int.tryParse(_accountNumberController.text);
         final Contato contato = Contato(id, name, accountNumber);
 
-        _save(contatoDao, contato, context);
+        if (name.isEmpty || accountNumber == null) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) =>
+                  FailureDialog('Preencha todos os campos!', title: 'Atenção'));
+        } else {
+          _save(contatoDao, contato, context);
+        }
       },
     );
   }
